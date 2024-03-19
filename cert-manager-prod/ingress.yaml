@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    konghq.com/https-redirect-status-code: "301"
+    konghq.com/preserve-host: "false"
+    konghq.com/protocols: https
+    konghq.com/strip-path: "false"
+    kubernetes.io/ingress.class: kong # This is the ingress class that you are using
+    kubernetes.io/tls-acme: "true"
+  name: deviceplane-tls-new-ingress
+  namespace: deviceplane
+spec:
+  rules:
+  - host: {test1.example.com}
+    http:
+      paths:
+      - backend:
+          service:
+            name: deviceplane
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  - host: {test2.example.com}
+    http:
+      paths:
+      - backend:
+          service:
+            name: deviceplane-downloads
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - test1.example.com
+    - test2.example.com
+    secretName: deviceplane-tls-new-secret
+status:
+  loadBalancer:
+    ingress:
+    - ip: 1.2.3.4 # This is the IP address of the load balancer that is created by the Ingress Controller ( Kong )

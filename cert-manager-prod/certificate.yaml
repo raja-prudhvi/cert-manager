@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: deviceplane-tls-new
+  namespace: deviceplane
+spec:
+  secretName: deviceplane-tls-new-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - {test1.example.com}
+  - {test2.example.com}
+  usages:
+    - digital signature
+    - key encipherment
+    - server auth

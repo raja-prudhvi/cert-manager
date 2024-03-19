@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer # This is a ClusterIssuer, which means that it can be used across multiple namespaces
+metadata:
+  name: letsencrypt-production-new
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: {your-email@gmail.com}
+    privateKeySecretRef:
+      name: letsencrypt-prod # This is the secret that will be created to store the private key
+    solvers:
+    - http01: # http01 is the challenge type that we are using
+       ingress:
+         class: kong # This is the ingress class that you are using
